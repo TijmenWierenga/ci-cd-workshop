@@ -5,6 +5,7 @@ For the cluster we are going to extend the Jenkins image with some Docker capabi
 ``` bash
 docker service create \
   --publish 5000:5000 \
+  --name registry \
   registry:2
 ```
 
