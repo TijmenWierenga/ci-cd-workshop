@@ -1,4 +1,43 @@
 # CI/CD Cluster
+Cluster overview:
+![](ci-cd.svg) 
+
+## Initialize a cluster
+Before we can start setting up a full CI-CD pipeline we need to create a brand new cluster.
+First, let's connect all the nodes to form a cluster.
+
+Initialize Swarm mode on the first node:
+``` bash
+docker swarm init --advertise-addr=$(docker-machine ip swarm-1)
+```
+
+Get the join-token for the other nodes:
+``` bash
+export MANAGER_TOKEN=$(docker swarm join-token manager -q)
+```
+
+And connect the other two nodes:
+``` bash
+for i in 2 3; do \
+    eval $(docker-machine env swarm-$i); \
+    docker swarm join $(docker-machine ip swarm-1):2377 --token $MANAGER_TOKEN; \
+done;
+```
+
+Our cluster is now initialized.
+
+## Visualization of our cluster
+After we've initialized our cluster, we can visualize it with a dedicated service. Start the service with:
+``` bash
+docker service create \
+  --name=visualizer \
+  --publish=8000:8080/tcp \
+  --constraint=node.role==manager \
+  --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock \
+  dockersamples/visualizer
+```
+
+The visualizer is now exposed over port `8000`.
 
 ## Setup Docker Registry
 For the cluster we are going to extend the Jenkins image with some Docker capabilities. Therefore we need a private registry where we can store our custom images. Create the registry as a service in our cluster:
@@ -22,6 +61,11 @@ Finally, push the image to the registry:
 docker push localhost:5000/tijmen/jenkins:lts
 ```
 
+To check if the image was successfully pushed to the registry, we can make an API-call to the registry to list all repositories:
+``` bash
+curl http://$(docker-machine ip swarm-1)/v2/_catalog
+```
+
 ## Setup Gitea/Jenkins
 Deploy the basic services
 
@@ -36,6 +80,11 @@ open "http://$(docker-machine ip default):8080"
 ```
 
 Get root password:
+``` bash
+docker exec $(docker container ps -f name=ci_jenkins -q) cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+Or to copy it directly to the clipboard from a Mac:
 ``` bash
 make copy_jenkins_pwd
 ```
