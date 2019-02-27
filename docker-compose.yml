@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  git:
+    image: gitea/gitea:latest
+    ports:
+      - 3000:3000
+      - 2222:22
+    volumes:
+      - gitea_data:/data
+    environment:
+      - USER_UID=${UID-502}
+      - USER_GID=${GID-20}
+      - SSH_DOMAIN=${GIT_SSH_DOMAIN-192.168.99.100} # NOT WORKING ATM - CONFIGURE IN GUI
+      - SSH_PORT=2222
+      - ROOT_URL=http://${GIT_ROOT_URL-192.168.99.100}:3000
+      - APP_NAME='My private GIT server'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+  jenkins:
+    image: localhost:5000/tijmen/jenkins:lts
+    ports:
+      - 8080:8080
+      - 50000:50000
+    environment:
+      - JAVA_OPTS=-Dhudson.footerURL=http://192.168.99.100:8080
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+
+volumes:
+  jenkins_home:
+    driver: local
+  gitea_data:
+    driver: local
