@@ -1,5 +1,15 @@
 # CI/CD Cluster
-Cluster overview:
+
+## Definitions
+**Continuous Integration**
+> In software engineering, continuous integration (CI) is the practice of merging all developer working copies to a shared mainline several times a day. (Wikipedia)
+
+> Continuous integration is the practice of routinely integrating code changes into the main branch of a repository, and testing the changes, as early and often as possible. Ideally, developers will integrate their code daily, if not multiple times a day. (Atlassian)
+
+**Continuous Deployment**
+> Continuous deployment happens when every change to the main branch that passes the CI tests gets pushed to production without the need for human interaction. This often results in many deployments per day which provide fast feedback to the development team. (Atlassian)
+
+## Cluster overview
 ![](ci-cd.svg) 
 
 ## Initialize a cluster
