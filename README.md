@@ -73,7 +73,7 @@ docker push localhost:5000/tijmen/jenkins:lts
 
 To check if the image was successfully pushed to the registry, we can make an API-call to the registry to list all repositories:
 ``` bash
-curl http://$(docker-machine ip swarm-1)/v2/_catalog
+curl http://$(docker-machine ip swarm-1):5000/v2/_catalog
 ```
 
 ## Setup Gitea/Jenkins
@@ -86,7 +86,7 @@ docker stack deploy -c docker-compose.yml ci
 
 ## Start Jenkins
 ``` bash
-open "http://$(docker-machine ip default):8080"
+open "http://$(docker-machine ip swarm-1):8080"
 ```
 
 Get root password:
@@ -103,13 +103,15 @@ Install the suggested plugins.
 
 ## Config Gitea
 ``` bash
-open "http://$(docker-machine ip default):3000"
+open "http://$(docker-machine ip swarm-1):3000"
 ```
 At the moment, the `SSL_DOMAIN` environment variable is not set automatically.
 
 Set it to the *IP address of the Docker daemon*, which will be **192.168.99.100** or **localhost**.
 
 ## Connect Gitea with Jenkins
+
+* (optional) Remove existing SSH entry (192.168.99.100:2222) from `~/.ssh/known_hosts`
 * Create account in Gitea
 * Download **Gitea** and **Docker** plugin for Jenkins
 * Configure Gitea plugin:
