@@ -10,7 +10,15 @@
 > Continuous deployment happens when every change to the main branch that passes the CI tests gets pushed to production without the need for human interaction. This often results in many deployments per day which provide fast feedback to the development team. (Atlassian)
 
 ## Cluster overview
-![](ci-cd.svg) 
+![](ci-cd.svg)
+
+## Prerequisites
+In order to participate into this workshop you need to have **docker-machine** installed.
+After installing docker-machine create at least three nodes:
+
+```bash
+for i in 1 2 3; do docker-machine create -d virtualbox --virtualbox-memory "4096" swarm-$i; done;
+```
 
 ## Initialize a cluster
 Before we can start setting up a full CI-CD pipeline we need to create a brand new cluster.
