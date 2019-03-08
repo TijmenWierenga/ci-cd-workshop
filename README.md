@@ -47,7 +47,7 @@ docker service create \
   dockersamples/visualizer
 ```
 
-The visualizer is now exposed over port `8000`.
+The visualizer is now exposed on the host at port `8000` on all three nodes. 
 
 ## Setup Docker Registry
 For the cluster we are going to extend the Jenkins image with some Docker capabilities. Therefore we need a private registry where we can store our custom images. Create the registry as a service in our cluster:
@@ -113,6 +113,7 @@ Set it to the *IP address of the Docker daemon*, which will be **192.168.99.100*
 
 * (optional) Remove existing SSH entry (192.168.99.100:2222) from `~/.ssh/known_hosts`
 * Create account in Gitea
+* Add your SSH public key in Gitea (`make copy_public_key` for Mac)
 * Download **Gitea** and **Docker** plugin for Jenkins
 * Configure Gitea plugin:
   * [Add server here](http://192.168.99.100:8080/configure)
