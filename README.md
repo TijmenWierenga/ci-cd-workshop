@@ -158,3 +158,17 @@ key | value |
 Volumes | /var/run/docker.sock:/var/run/docker.sock |
 
 Last but not least set the connect method to **Connect with JNLP** and click **save**.
+
+Jenkins is now fully prepared to spin up new build slaves as Docker containers on demand. Let's try everything out in the demo application.
+
+## Deploying a demo application
+Pull the demo application:
+```bash
+git clone git@github.xs4all.net:twieren0/ci-cd-demo.git
+```
+
+Next, create a new repository on Gitea called `symfony`.
+Create a new origin called `gitea` and push it to the server.
+
+Jenkins should auto-discover the new repository and build the master branch right away.
+If everything was configured correctly, 10 instances of the demo application should be running within the cluster.
